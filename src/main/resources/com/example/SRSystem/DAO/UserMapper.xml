@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.example.srsystem.DAO.UserMapper">
+
+    <resultMap id = "UserResult" type = "com.example.srsystem.domain.entity.Users" >
+        <id property = "userId" column = "UserID" />
+        <result property="firstName" column="FirstName" />
+        <result property="lastName" column="LastName" />
+        <result property="username" column="Username" />
+        <result property="password" column="Password"/>
+        <result property="email" column="Email" />
+    </resultMap>
+
+    <!-- register -->
+    <insert id="register" parameterType="com.example.srsystem.domain.entity.Users">
+        insert into Users(`firstName`, `lastName`,`username`, `password`, `email`)
+        values (#{firstName}, #{lastName}, #{username}, #{password}, #{email})
+    </insert>
+
+    <!-- log in -->
+    <select id = "login" resultType = "com.example.srsystem.domain.entity.Users">
+        select *
+        from Users
+        where username = #{username} and password = #{password}
+    </select>
+
+    <select id="selectUserInfoByUserName" resultMap="UserResult" >
+        select *
+        from Users
+        where username = #{username}
+    </select>
+
+    <update id="changePassword" parameterType="com.example.srsystem.domain.entity.Users">
+        update Users
+        set password = #{password}
+        where username = #{username}
+    </update>
+
+</mapper>
