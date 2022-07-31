@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "spring.mybatis-plus.mapper-locations",
+      "type": "java.lang.String",
+      "description": "Description for spring.mybatis-plus.mapper-locations."
+    },
+    {
+      "name": "spring.srsystem.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for spring.srsystem.jwt.secret."
+    }
+  ] }

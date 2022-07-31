@@ -2,6 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace = "com.example.srsystem.DAO.UserMapper">
 
     <resultMap id = "UserResult" type = "com.example.srsystem.domain.entity.Users" >
@@ -15,25 +16,25 @@
 
     <!-- register -->
     <insert id="register" parameterType="com.example.srsystem.domain.entity.Users">
-        insert into Users(`firstName`, `lastName`,`username`, `password`, `email`)
+        insert into users(`firstName`, `lastName`,`username`, `password`, `email`)
         values (#{firstName}, #{lastName}, #{username}, #{password}, #{email})
     </insert>
 
-    <!-- log in -->
+    <!-- log in-->
     <select id = "login" resultType = "com.example.srsystem.domain.entity.Users">
         select *
-        from Users
-        where username = #{username} and password = #{password}
+        from users
+        where username = #{username}
     </select>
 
     <select id="selectUserInfoByUserName" resultMap="UserResult" >
         select *
-        from Users
+        from users
         where username = #{username}
     </select>
 
     <update id="changePassword" parameterType="com.example.srsystem.domain.entity.Users">
-        update Users
+        update users
         set password = #{password}
         where username = #{username}
     </update>

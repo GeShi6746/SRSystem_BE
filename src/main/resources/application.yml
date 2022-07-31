@@ -1,6 +1,6 @@
 
 server:
-  port: 8080
+  port: 80
   servlet:
     context-path: /
 
@@ -19,9 +19,19 @@ spring:
     properties.mail.smtp.ssl.enable: true
     default-encoding: utf-8
   datasource:
-    url: jdbc:mysql://localhost:3306/SRSystem?useSSL=false
+    url: jdbc:mysql://localhost:3306/srsystem?useSSL=false
     username: root
-    password: 123456
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mybatis-plus:
+    mapper-locations=classpath*: /com/example/srsystem/DAO/**Mapper.xml
+  shiro-redis:
+    enabled: true
+    redis-manager:
+      host: 127.0.0.1:6379
+  jwt:
+    secret: hj4iRrB2DEGAMDRHzVYFed14weSN
+    expire: 604800
+    header: token
   jackson:
     time-zone: GMT-5

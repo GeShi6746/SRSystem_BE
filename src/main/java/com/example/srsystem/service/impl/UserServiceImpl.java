@@ -1,5 +1,6 @@
 package com.example.srsystem.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.srsystem.DAO.UserMapper;
 import com.example.srsystem.domain.entity.Users;
 import com.example.srsystem.service.UserService;
@@ -17,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements UserService {
 
     @Resource
     private JavaMailSender javaMailSender;
@@ -34,9 +35,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users login(@Param("username") String username, @Param("password") String password){
-        String pwd = getSalt(password);
-        return userMapper.login(username, pwd);
+    public Users login(@Param("username") String username){
+        return userMapper.login(username);
     }
 
     @Override
