@@ -133,18 +133,20 @@
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
+					<include>**/*.yml</include>
 					<include>**/*.xml</include>
 					<include>**/*.properties</include>
 				</includes>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
+					<include>**/*.yml</include>
 					<include>**/*.xml</include>
 					<include>**/*.properties</include>
 				</includes>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 			</resource>
 		</resources>
 
