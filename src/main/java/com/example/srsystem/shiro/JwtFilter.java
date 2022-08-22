@@ -2,7 +2,7 @@ package com.example.srsystem.shiro;
 
 import cn.hutool.json.JSONUtil;
 import com.example.srsystem.common.lang.Result;
-import com.example.srsystem.util.JwtUtils;
+import com.example.srsystem.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -24,7 +24,7 @@ import java.io.IOException;
 public class JwtFilter extends AuthenticatingFilter {
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
 
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {

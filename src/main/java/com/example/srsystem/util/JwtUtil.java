@@ -14,8 +14,7 @@ import java.util.Date;
 @Data
 @Component
 @ConfigurationProperties(prefix = "jwt")
-public class JwtUtils {
-
+public class JwtUtil {
     private String secret;
     private long expire;
     private String header;

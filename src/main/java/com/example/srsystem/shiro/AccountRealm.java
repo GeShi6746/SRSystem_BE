@@ -3,7 +3,7 @@ package com.example.srsystem.shiro;
 import cn.hutool.core.bean.BeanUtil;
 import com.example.srsystem.domain.entity.Users;
 import com.example.srsystem.service.UserService;
-import com.example.srsystem.util.JwtUtils;
+import com.example.srsystem.util.JwtUtil;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class AccountRealm extends AuthorizingRealm {
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
 
     @Autowired
     UserService userService;

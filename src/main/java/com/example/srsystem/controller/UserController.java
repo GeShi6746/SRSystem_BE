@@ -2,13 +2,13 @@ package com.example.srsystem.controller;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.srsystem.common.dto.LoginDto;
 import com.example.srsystem.common.lang.Result;
 import com.example.srsystem.domain.entity.Users;
+import com.example.srsystem.domain.model.ChangePassword;
+import com.example.srsystem.domain.model.Register;
 import com.example.srsystem.service.UserService;
-import com.example.srsystem.util.JwtUtils;
+import com.example.srsystem.util.JwtUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -25,30 +25,24 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
     @Autowired
     private UserService userService;
 
     @PostMapping("/Register")
-    public Map<String,String> register(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("username") String username, @Param("email") String email){
+    public Map<String,String> register(@RequestBody Register register){
         Map<String, String> ret = new HashMap<>();
-        Users user = userService.login(username);
+        Users user = userService.login(register.getUsername());
         if(user != null){
             Assert.notNull(user, "The username has existed.");
             ret.put("code", "401");
             ret.put("msg", "The username has existed.");
             return ret;
         }
-        boolean isCoEmail = userService.isCorrectEmaFormat(email);
-        if(!isCoEmail){
-            ret.put("code", "401");
-            ret.put("msg", "Please enter email in the correct format.");
-            return ret;
-        }
         String Password = userService.randomPassword();
-        userService.sendEmail(username,email,Password);
+        userService.sendEmail(register.getUsername(),register.getEmail(),Password);
         String pwd = userService.getSalt(Password);
-        userService.register(firstName, lastName, username, pwd, email);
+        userService.register(register.getFirstName(), register.getLastName(), register.getUsername(), pwd, register.getEmail());
         ret.put("code", "200");
         ret.put("msg", "Register success.");
         return ret;
@@ -92,13 +86,13 @@ public class UserController {
     }
 
     @PostMapping("/ChangePassword")
-    public Map<String, String> changePassword(@Param("username") String username, @Param("password") String password){
+    public Map<String, String> changePassword(@RequestBody ChangePassword changePassword){
         Map<String, String> ret = new HashMap<>();
 
-        boolean isCorrect = userService.isCorrectPwFormat(password);
+        boolean isCorrect = userService.isCorrectPwFormat(changePassword.getPassword());
         if(isCorrect){
-            String pwd = userService.getSalt(password);
-            userService.changePassword(username, pwd);
+            String pwd = userService.getSalt(changePassword.getPassword());
+            userService.changePassword(changePassword.getUsername(), pwd);
             ret.put("code", "200");
             ret.put("msg", "Change password success.");
             return ret;
