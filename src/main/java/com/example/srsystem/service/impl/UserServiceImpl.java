@@ -1,7 +1,7 @@
 package com.example.srsystem.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.srsystem.DAO.UserMapper;
+import com.example.srsystem.domain.entity.Numeraidata;
 import com.example.srsystem.domain.entity.Users;
 import com.example.srsystem.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Resource
     private JavaMailSender javaMailSender;
@@ -32,6 +33,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements U
     @Override
     public void register(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("username") String username, @Param("password") String password, @Param("email") String email){
         userMapper.register(firstName, lastName, username, password, email);
+    }
+
+    @Override
+    public Users selectUserById(@Param("userId") String userId){
+        return userMapper.selectUserById(userId);
     }
 
     @Override
@@ -79,18 +85,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements U
     }
 
     @Override
-    public boolean isCorrectEmaFormat(String email){
-        boolean isCorrect=true;
-        String regEx="\\w{3,15}@(\\w{2,8}\\.){1,2}(com|net|cn|edu)";
-        Pattern pattern = Pattern.compile(regEx);
-        Matcher matcher = pattern.matcher(email);
-        if(!matcher.matches()){
-            isCorrect = false;
-        }
-        return isCorrect;
-    }
-
-    @Override
     public String randomPassword(){
         String str1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String str2 = "~!@#$%^&*";
@@ -115,4 +109,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements U
         javaMailSender.send(message);
     }
 
+    @Override
+    public List<Numeraidata> selectData(){
+        return userMapper.selectData();
+    }
 }

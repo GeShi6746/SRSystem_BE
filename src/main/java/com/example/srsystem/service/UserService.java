@@ -1,14 +1,18 @@
 package com.example.srsystem.service;
 
+import com.example.srsystem.domain.entity.Numeraidata;
 import com.example.srsystem.domain.entity.Users;
 import org.apache.ibatis.annotations.Param;
-import com.baomidou.mybatisplus.extension.service.IService;
 
-public interface UserService extends IService<Users>{
+import java.util.List;
+
+public interface UserService {
 
     void register(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("username") String username, @Param("password") String password, @Param("email") String email);
 
     Users login(@Param("username") String username);
+
+    Users selectUserById(@Param("userId") String userId);
 
     Users userInfo(@Param("username")String username);
 
@@ -16,12 +20,12 @@ public interface UserService extends IService<Users>{
 
     String getSalt(String password);
 
-    boolean isCorrectEmaFormat(@Param("email") String email);
-
     String randomPassword();
 
     void sendEmail(@Param("username") String username, @Param("email") String email, @Param("password") String password);
 
     boolean isCorrectPwFormat(String password);
+
+    List<Numeraidata> selectData();
 
 }

@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import com.example.srsystem.common.dto.LoginDto;
 import com.example.srsystem.common.lang.Result;
+import com.example.srsystem.domain.entity.Numeraidata;
 import com.example.srsystem.domain.entity.Users;
 import com.example.srsystem.domain.model.ChangePassword;
 import com.example.srsystem.domain.model.Register;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -79,7 +81,6 @@ public class UserController {
         return Result.succ(null);
     }
 
-
     @GetMapping("/UserInfo")
     public Users userInfo(@Param("username") String username){
         return userService.userInfo(username);
@@ -103,4 +104,8 @@ public class UserController {
         }
     }
 
+    @GetMapping("/Data")
+    public List<Numeraidata> selectData(){
+        return userService.selectData();
+    }
 }

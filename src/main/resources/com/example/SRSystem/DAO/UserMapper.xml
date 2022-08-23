@@ -27,6 +27,12 @@
         where username = #{username}
     </select>
 
+    <select id="selectUserById" resultMap="UserResult" >
+        select *
+        from users
+        where userId = #{userId}
+    </select>
+
     <select id="selectUserInfoByUserName" resultMap="UserResult" >
         select *
         from users
@@ -38,5 +44,10 @@
         set password = #{password}
         where username = #{username}
     </update>
+
+    <select id="selectData" resultType="com.example.srsystem.domain.entity.Numeraidata" >
+        select id,era,data_Type,feature_Intelligence1,feature_Intelligence2,feature_Intelligence3,feature_Intelligence4,feature_Intelligence5,feature_Intelligence6,feature_Intelligence7,feature_Intelligence8,feature_Intelligence9,feature_Intelligence10,feature_Intelligence11,feature_Intelligence12,target
+        from numeraidata
+    </select>
 
 </mapper>

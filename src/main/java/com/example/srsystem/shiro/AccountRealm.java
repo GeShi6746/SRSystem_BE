@@ -37,7 +37,7 @@ public class AccountRealm extends AuthorizingRealm {
 
         String userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).getSubject();
 
-        Users user = userService.getById(Long.valueOf(userId));
+        Users user = userService.selectUserById(String.valueOf(Long.valueOf(userId)));
         if (user == null) {
             throw new UnknownAccountException("The account does not exist.");
         }
