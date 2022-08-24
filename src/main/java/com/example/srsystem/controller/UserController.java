@@ -5,6 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import com.example.srsystem.common.dto.LoginDto;
 import com.example.srsystem.common.lang.Result;
 import com.example.srsystem.domain.entity.Numeraidata;
+import com.example.srsystem.domain.entity.Prediction;
 import com.example.srsystem.domain.entity.Users;
 import com.example.srsystem.domain.model.ChangePassword;
 import com.example.srsystem.domain.model.Register;
@@ -107,5 +108,10 @@ public class UserController {
     @GetMapping("/Data")
     public List<Numeraidata> selectData(){
         return userService.selectData();
+    }
+
+    @GetMapping("/Prediction")
+    public List<Prediction> selectPrediction(){
+        return userService.selectPrediction();
     }
 }

@@ -2,6 +2,7 @@ package com.example.srsystem.service.impl;
 
 import com.example.srsystem.DAO.UserMapper;
 import com.example.srsystem.domain.entity.Numeraidata;
+import com.example.srsystem.domain.entity.Prediction;
 import com.example.srsystem.domain.entity.Users;
 import com.example.srsystem.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -112,5 +113,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Numeraidata> selectData(){
         return userMapper.selectData();
+    }
+
+    @Override
+    public List<Prediction> selectPrediction(){
+        return userMapper.selectPrediction();
     }
 }

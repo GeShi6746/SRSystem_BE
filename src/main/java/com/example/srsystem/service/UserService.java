@@ -1,6 +1,7 @@
 package com.example.srsystem.service;
 
 import com.example.srsystem.domain.entity.Numeraidata;
+import com.example.srsystem.domain.entity.Prediction;
 import com.example.srsystem.domain.entity.Users;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +29,5 @@ public interface UserService {
 
     List<Numeraidata> selectData();
 
+    List<Prediction> selectPrediction();
 }

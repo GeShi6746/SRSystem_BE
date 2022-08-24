@@ -46,8 +46,8 @@ public class Users implements Serializable {
   @Column(name = "Email" )
   private String email;
 
-  @Column(name = "Code" )
-  private int code;
+  @Column(name = "VCode" )
+  private int vcode;
 
 
   public long getUserId() {
