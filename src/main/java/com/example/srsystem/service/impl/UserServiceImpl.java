@@ -3,7 +3,9 @@ package com.example.srsystem.service.impl;
 import com.example.srsystem.DAO.UserMapper;
 import com.example.srsystem.domain.entity.Numeraidata;
 import com.example.srsystem.domain.entity.Prediction;
+import com.example.srsystem.domain.entity.Selfselect;
 import com.example.srsystem.domain.entity.Users;
+import com.example.srsystem.domain.model.Detail;
 import com.example.srsystem.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +88,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void sendVCode(String username) {
+        int vcode = creatVCode();
+        sendComfirmEmail(username, vcode);
+        userMapper.sendVCode(username, vcode);
+    }
+
+    public int creatVCode(){
+        return (int) ((Math.random()*9+1)*1000);
+    }
+
+    public void sendComfirmEmail(String username, int vcode){
+        String email = userMapper.selectUserInfoByUserName(username).getEmail();
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(email);
+        message.setSubject("Changing account password");
+        message.setText("Hello " + username + ",\n\n" + "Confirmation number:  "+ vcode + "\n\nYou are changing the SRSystem account password.\n" +
+                "If you did not do this, please delete this email.");
+        javaMailSender.send(message);
+    }
+
+    @Override
+    public boolean confirmVCode(String username, int ccode) {
+        int vcode = userMapper.confirmVCode(username);
+        return vcode == ccode;
+    }
+
+    @Override
     public String randomPassword(){
         String str1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String str2 = "~!@#$%^&*";
@@ -119,4 +149,45 @@ public class UserServiceImpl implements UserService {
     public List<Prediction> selectPrediction(){
         return userMapper.selectPrediction();
     }
+
+    @Override
+    public void addStock(@Param("username") String username, @Param("stockId") String stockId){
+        userMapper.addStock(username, stockId);
+    }
+
+    @Override
+    public List<Selfselect> selectStock(@Param("username") String username){
+        return userMapper.selectStock(username);
+    }
+
+    @Override
+    public void deleteStock(@Param("id") long id){
+        userMapper.deleteStock(id);
+    }
+
+    @Override
+    public Detail viewDetail(@Param("id") String id){
+        Numeraidata data = userMapper.viewData(id);
+        Prediction prediction = userMapper.viewPrediction(id);
+        Detail detail = new Detail();
+        detail.setId(id);
+        detail.setEra(data.getEra());
+        detail.setData_Type(data.getData_Type());
+        detail.setFeature_Intelligence1(data.getFeature_Intelligence1());
+        detail.setFeature_Intelligence2(data.getFeature_Intelligence2());
+        detail.setFeature_Intelligence3(data.getFeature_Intelligence3());
+        detail.setFeature_Intelligence4(data.getFeature_Intelligence4());
+        detail.setFeature_Intelligence5(data.getFeature_Intelligence5());
+        detail.setFeature_Intelligence6(data.getFeature_Intelligence6());
+        detail.setFeature_Intelligence7(data.getFeature_Intelligence7());
+        detail.setFeature_Intelligence8(data.getFeature_Intelligence8());
+        detail.setFeature_Intelligence9(data.getFeature_Intelligence9());
+        detail.setFeature_Intelligence10(data.getFeature_Intelligence10());
+        detail.setFeature_Intelligence11(data.getFeature_Intelligence11());
+        detail.setFeature_Intelligence12(data.getFeature_Intelligence12());
+        detail.setTarget(data.getTarget());
+        detail.setPrediction(prediction.getPrediction());
+        return detail;
+    }
+
 }

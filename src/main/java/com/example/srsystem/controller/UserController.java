@@ -7,7 +7,9 @@ import com.example.srsystem.common.lang.Result;
 import com.example.srsystem.domain.entity.Numeraidata;
 import com.example.srsystem.domain.entity.Prediction;
 import com.example.srsystem.domain.entity.Users;
+import com.example.srsystem.domain.model.AddStock;
 import com.example.srsystem.domain.model.ChangePassword;
+import com.example.srsystem.domain.model.ConfirmVCode;
 import com.example.srsystem.domain.model.Register;
 import com.example.srsystem.service.UserService;
 import com.example.srsystem.util.JwtUtil;
@@ -33,32 +35,25 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/Register")
-    public Map<String,String> register(@RequestBody Register register){
-        Map<String, String> ret = new HashMap<>();
+    public Result register(@RequestBody Register register){
         Users user = userService.login(register.getUsername());
         if(user != null){
             Assert.notNull(user, "The username has existed.");
-            ret.put("code", "401");
-            ret.put("msg", "The username has existed.");
-            return ret;
+            return Result.fail("The username has existed.");
         }
         String Password = userService.randomPassword();
         userService.sendEmail(register.getUsername(),register.getEmail(),Password);
         String pwd = userService.getSalt(Password);
         userService.register(register.getFirstName(), register.getLastName(), register.getUsername(), pwd, register.getEmail());
-        ret.put("code", "200");
-        ret.put("msg", "Register success.");
-        return ret;
+        return Result.succ("Register success.");
     }
 
     @PostMapping("/Login")
     public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
-
         Users user = userService.login(loginDto.getUsername());
         if(user == null){
             Assert.notNull(user, "The user does not exist.");
         }
-
         if(!user.getPassword().equals(userService.getSalt(loginDto.getPassword()))){
             return Result.fail("The username or password is incorrect.");
         }
@@ -83,35 +78,67 @@ public class UserController {
     }
 
     @GetMapping("/UserInfo")
-    public Users userInfo(@Param("username") String username){
-        return userService.userInfo(username);
+    public Result userInfo(@Param("username") String username){
+        return Result.succ(userService.userInfo(username));
     }
 
     @PostMapping("/ChangePassword")
-    public Map<String, String> changePassword(@RequestBody ChangePassword changePassword){
-        Map<String, String> ret = new HashMap<>();
-
+    public Result changePassword(@RequestBody ChangePassword changePassword){
         boolean isCorrect = userService.isCorrectPwFormat(changePassword.getPassword());
         if(isCorrect){
             String pwd = userService.getSalt(changePassword.getPassword());
             userService.changePassword(changePassword.getUsername(), pwd);
-            ret.put("code", "200");
-            ret.put("msg", "Change password success.");
-            return ret;
+            return Result.succ("Change password success.");
         } else {
-            ret.put("code", "400");
-            ret.put("msg", "The password you entered is not in the correct format.");
-            return ret;
+            return Result.fail("The password you entered is not in the correct format.");
+        }
+    }
+
+    @PostMapping("/sendVCode")
+    public Result sendVCode(@RequestBody ConfirmVCode confirmVCode){
+        userService.sendVCode(confirmVCode.getUsername());
+        return Result.succ("Send confirmation number success.");
+    }
+
+    @GetMapping("/confirmVCode")
+    public Result confirmVCode(@Param("username") String username, @Param("ccode") int ccode){
+        boolean isCorrect = userService.confirmVCode(username, ccode);
+        if(isCorrect){
+            return Result.succ("Correct confirmation number.");
+        } else {
+            return Result.fail("Incorrect confirmation number.");
         }
     }
 
     @GetMapping("/Data")
-    public List<Numeraidata> selectData(){
-        return userService.selectData();
+    public Result selectData(){
+        return Result.succ(userService.selectData());
     }
 
     @GetMapping("/Prediction")
-    public List<Prediction> selectPrediction(){
-        return userService.selectPrediction();
+    public Result selectPrediction(){
+        return Result.succ(userService.selectPrediction());
+    }
+
+    @PostMapping("/AddStock")
+    public Result addStock(@Param("username") String username, @Param("stockId") String stockId){
+        userService.addStock(username, stockId);
+        return Result.succ("Adding self-selected stock succeeded.");
+    }
+
+    @GetMapping("/SelectStock")
+    public Result selectStock(@Param("username") String username){
+        return Result.succ(userService.selectStock(username));
+    }
+
+    @GetMapping("/ViewStockDetail")
+    public Result viewDetail(@Param("stockId") String stockId){
+        return Result.succ(userService.viewDetail(stockId));
+    }
+
+    @GetMapping("/DeleteStock")
+    public Result deleteStock(@Param("id") long id){
+        userService.deleteStock(id);
+        return Result.succ("Deleting self-selected stock succeeded.");
     }
 }

@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class ChangePassword implements Serializable {
+public class AddStock implements Serializable {
     private String username;
 
-    private String password;
+    private String stockId;
 }
