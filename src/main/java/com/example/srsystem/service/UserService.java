@@ -1,10 +1,9 @@
 package com.example.srsystem.service;
 
-import com.example.srsystem.domain.entity.Numeraidata;
-import com.example.srsystem.domain.entity.Prediction;
-import com.example.srsystem.domain.entity.Selfselect;
-import com.example.srsystem.domain.entity.Users;
+import com.example.srsystem.domain.entity.*;
 import com.example.srsystem.domain.model.Detail;
+import com.example.srsystem.domain.model.Numeraidata;
+import com.example.srsystem.domain.model.Prediction;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,11 +36,13 @@ public interface UserService {
 
     List<Prediction> selectPrediction();
 
-    void addStock(@Param("username") String username, @Param("stockId") String stockId);
+    boolean addStock(@Param("username") String username, @Param("stockId") String stockId);
 
     List<Selfselect> selectStock(@Param("username") String username);
 
     void deleteStock(@Param("id") long id);
 
     Detail viewDetail(@Param("id") String id);
+
+    void addRisk();
 }

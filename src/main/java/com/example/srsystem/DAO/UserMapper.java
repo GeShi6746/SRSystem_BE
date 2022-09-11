@@ -1,9 +1,9 @@
 package com.example.srsystem.DAO;
 
-import com.example.srsystem.domain.entity.Numeraidata;
-import com.example.srsystem.domain.entity.Prediction;
-import com.example.srsystem.domain.entity.Selfselect;
-import com.example.srsystem.domain.entity.Users;
+import com.example.srsystem.domain.entity.*;
+import com.example.srsystem.domain.model.Detail;
+import com.example.srsystem.domain.model.Numeraidata;
+import com.example.srsystem.domain.model.Prediction;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -41,4 +41,8 @@ public interface UserMapper {
     Numeraidata viewData(@Param("id") String id);
 
     Prediction viewPrediction(@Param("id") String id);
+
+    List<Detail> selectRisk();
+
+    void addRisk(@Param("id") String id, @Param("risk") double risk);
 }

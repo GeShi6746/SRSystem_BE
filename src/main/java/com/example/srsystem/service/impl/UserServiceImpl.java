@@ -1,11 +1,10 @@
 package com.example.srsystem.service.impl;
 
 import com.example.srsystem.DAO.UserMapper;
-import com.example.srsystem.domain.entity.Numeraidata;
-import com.example.srsystem.domain.entity.Prediction;
-import com.example.srsystem.domain.entity.Selfselect;
-import com.example.srsystem.domain.entity.Users;
+import com.example.srsystem.domain.entity.*;
 import com.example.srsystem.domain.model.Detail;
+import com.example.srsystem.domain.model.Numeraidata;
+import com.example.srsystem.domain.model.Prediction;
 import com.example.srsystem.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -151,8 +151,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addStock(@Param("username") String username, @Param("stockId") String stockId){
+    public boolean addStock(@Param("username") String username, @Param("stockId") String stockId){
+        List<Selfselect> list = userMapper.selectStock(username);
+        for (Selfselect selfselect : list){
+            if (selfselect.getStockId().equals(stockId))
+                return false;
+        }
         userMapper.addStock(username, stockId);
+        return true;
     }
 
     @Override
@@ -190,4 +196,16 @@ public class UserServiceImpl implements UserService {
         return detail;
     }
 
+    @Override
+    public void addRisk(){
+        List<Detail> list = userMapper.selectRisk();
+        for (Detail detail : list){
+            BigDecimal target = new BigDecimal(detail.getTarget());
+            BigDecimal prediction = new BigDecimal(detail.getPrediction());
+            BigDecimal x = new BigDecimal("10000");
+            BigDecimal r = target.subtract(prediction);
+            double risk = r.multiply(r).multiply(x).doubleValue();
+            userMapper.addRisk(detail.getId(), risk);
+        }
+    }
 }

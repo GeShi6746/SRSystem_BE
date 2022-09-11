@@ -4,10 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import com.example.srsystem.common.dto.LoginDto;
 import com.example.srsystem.common.lang.Result;
-import com.example.srsystem.domain.entity.Numeraidata;
-import com.example.srsystem.domain.entity.Prediction;
 import com.example.srsystem.domain.entity.Users;
-import com.example.srsystem.domain.model.AddStock;
 import com.example.srsystem.domain.model.ChangePassword;
 import com.example.srsystem.domain.model.ConfirmVCode;
 import com.example.srsystem.domain.model.Register;
@@ -22,9 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class UserController {
@@ -122,8 +116,12 @@ public class UserController {
 
     @PostMapping("/AddStock")
     public Result addStock(@Param("username") String username, @Param("stockId") String stockId){
-        userService.addStock(username, stockId);
-        return Result.succ("Adding self-selected stock succeeded.");
+        boolean canAdd = userService.addStock(username, stockId);
+        if(canAdd){
+            return Result.succ("Adding self-selected stock succeeded.");
+        } else {
+            return Result.fail("The stock has been added.");
+        }
     }
 
     @GetMapping("/SelectStock")
@@ -140,5 +138,11 @@ public class UserController {
     public Result deleteStock(@Param("id") long id){
         userService.deleteStock(id);
         return Result.succ("Deleting self-selected stock succeeded.");
+    }
+
+    @PostMapping("/AddRisk")
+    public Result addRisk(){
+        userService.addRisk();
+        return Result.succ("Succeeded.");
     }
 }

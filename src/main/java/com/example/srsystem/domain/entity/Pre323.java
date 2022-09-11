@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-@Table( name ="prediction" )
-public class Prediction implements Serializable {
+@Table( name ="pre323" )
+public class Pre323 implements Serializable {
 
   @Column(name = "id" )
   private String id;

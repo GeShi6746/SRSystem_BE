@@ -10,8 +10,8 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-@Table( name ="numeraidata" )
-public class Numeraidata implements Serializable {
+@Table( name ="data332" )
+public class Data332 implements Serializable {
 
   @Column(name = "id" )
   private String id;
