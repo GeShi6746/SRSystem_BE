@@ -5,9 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import com.example.srsystem.common.dto.LoginDto;
 import com.example.srsystem.common.lang.Result;
 import com.example.srsystem.domain.entity.Users;
-import com.example.srsystem.domain.model.ChangePassword;
-import com.example.srsystem.domain.model.ConfirmVCode;
-import com.example.srsystem.domain.model.Register;
+import com.example.srsystem.domain.model.*;
 import com.example.srsystem.service.UserService;
 import com.example.srsystem.util.JwtUtil;
 import org.apache.ibatis.annotations.Param;
@@ -78,23 +76,18 @@ public class UserController {
 
     @PostMapping("/ChangePassword")
     public Result changePassword(@RequestBody ChangePassword changePassword){
-        boolean isCorrect = userService.isCorrectPwFormat(changePassword.getPassword());
-        if(isCorrect){
-            String pwd = userService.getSalt(changePassword.getPassword());
-            userService.changePassword(changePassword.getUsername(), pwd);
-            return Result.succ("Change password success.");
-        } else {
-            return Result.fail("The password you entered is not in the correct format.");
-        }
+        String pwd = userService.getSalt(changePassword.getPassword());
+        userService.changePassword(changePassword.getUsername(), pwd);
+        return Result.succ("Change password success.");
     }
 
-    @PostMapping("/sendVCode")
+    @PostMapping("/SendVCode")
     public Result sendVCode(@RequestBody ConfirmVCode confirmVCode){
         userService.sendVCode(confirmVCode.getUsername());
         return Result.succ("Send confirmation number success.");
     }
 
-    @GetMapping("/confirmVCode")
+    @GetMapping("/ConfirmVCode")
     public Result confirmVCode(@Param("username") String username, @Param("ccode") int ccode){
         boolean isCorrect = userService.confirmVCode(username, ccode);
         if(isCorrect){
@@ -105,8 +98,8 @@ public class UserController {
     }
 
     @GetMapping("/Data")
-    public Result selectData(){
-        return Result.succ(userService.selectData());
+    public Result selectData(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize){
+        return Result.succ(userService.selectData(pageNum, pageSize));
     }
 
     @GetMapping("/Prediction")
@@ -140,9 +133,38 @@ public class UserController {
         return Result.succ("Deleting self-selected stock succeeded.");
     }
 
+    @GetMapping("/RiskRange")
+    public Result riskrange(@Param("min") int min, @Param("max") int max){
+        RiskRange riskRange = new RiskRange();
+        riskRange.setMaxValue(0);
+        riskRange.setMinValue(0);
+        return Result.succ(riskRange);
+    }
+
+    @GetMapping("/Recommendation")
+    public Result recommendation(@Param("min") int min, @Param("max") int max, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize){
+        return Result.succ(userService.selectStockByRange(min, max, pageNum, pageSize));
+    }
+
     @PostMapping("/AddRisk")
     public Result addRisk(){
         userService.addRisk();
         return Result.succ("Succeeded.");
+    }
+
+    @GetMapping("/Targets")
+    public Result getTargets(@Param("stockId") String stockId){
+        Detail detail = userService.viewDetail(stockId);
+        double target = Double.parseDouble(detail.getTarget());
+        Targets targets = new Targets();
+        targets.setTarget0(target);
+        targets.setTarget1(target);
+        targets.setTarget2(target);
+        return Result.succ(targets);
+    }
+
+    @GetMapping("/SelfRecoms")
+    public Result selfRecoms(){
+        return Result.succ(userService.selfRecoms());
     }
 }

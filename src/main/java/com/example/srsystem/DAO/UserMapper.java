@@ -42,7 +42,11 @@ public interface UserMapper {
 
     Prediction viewPrediction(@Param("id") String id);
 
+    List<Numeraidata> selectStockByRange(@Param("min") double min, @Param("max") double max);
+
+    List<Numeraidata> selfRecoms();
+
     List<Detail> selectRisk();
 
-    void addRisk(@Param("id") String id, @Param("risk") double risk);
+    void addRisk1(@Param("id") String id, @Param("risk") double risk);
 }

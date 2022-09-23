@@ -1,10 +1,12 @@
 package com.example.srsystem.domain.model;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -13,8 +15,6 @@ public class Numeraidata implements Serializable {
   private String id;
 
   private String era;
-
-  private String data_Type;
 
   private String feature_Intelligence1;
 
@@ -26,23 +26,12 @@ public class Numeraidata implements Serializable {
 
   private String feature_Intelligence5;
 
-  private String feature_Intelligence6;
-
-  private String feature_Intelligence7;
-
-  private String feature_Intelligence8;
-
-  private String feature_Intelligence9;
-
-  private String feature_Intelligence10;
-
-  private String feature_Intelligence11;
-
-  private String feature_Intelligence12;
-
   private String target;
 
-  private String risk;
+  @JsonSerialize(using=BigDecimalJsonSerializer.class)
+  private BigDecimal risk;
+
+  private double growth_rate;
 
 
   public String getId() {
@@ -60,15 +49,6 @@ public class Numeraidata implements Serializable {
 
   public void setEra(String era) {
     this.era = era;
-  }
-
-
-  public String getData_Type() {
-    return data_Type;
-  }
-
-  public void setData_Type(String data_Type) {
-    this.data_Type = data_Type;
   }
 
 
@@ -114,69 +94,6 @@ public class Numeraidata implements Serializable {
 
   public void setFeature_Intelligence5(String feature_Intelligence5) {
     this.feature_Intelligence5 = feature_Intelligence5;
-  }
-
-
-  public String getFeature_Intelligence6() {
-    return feature_Intelligence6;
-  }
-
-  public void setFeature_Intelligence6(String feature_Intelligence6) {
-    this.feature_Intelligence6 = feature_Intelligence6;
-  }
-
-
-  public String getFeature_Intelligence7() {
-    return feature_Intelligence7;
-  }
-
-  public void setFeature_Intelligence7(String feature_Intelligence7) {
-    this.feature_Intelligence7 = feature_Intelligence7;
-  }
-
-
-  public String getFeature_Intelligence8() {
-    return feature_Intelligence8;
-  }
-
-  public void setFeature_Intelligence8(String feature_Intelligence8) {
-    this.feature_Intelligence8 = feature_Intelligence8;
-  }
-
-
-  public String getFeature_Intelligence9() {
-    return feature_Intelligence9;
-  }
-
-  public void setFeature_Intelligence9(String feature_Intelligence9) {
-    this.feature_Intelligence9 = feature_Intelligence9;
-  }
-
-
-  public String getFeature_Intelligence10() {
-    return feature_Intelligence10;
-  }
-
-  public void setFeature_Intelligence10(String feature_Intelligence10) {
-    this.feature_Intelligence10 = feature_Intelligence10;
-  }
-
-
-  public String getFeature_Intelligence11() {
-    return feature_Intelligence11;
-  }
-
-  public void setFeature_Intelligence11(String feature_Intelligence11) {
-    this.feature_Intelligence11 = feature_Intelligence11;
-  }
-
-
-  public String getFeature_Intelligence12() {
-    return feature_Intelligence12;
-  }
-
-  public void setFeature_Intelligence12(String feature_Intelligence12) {
-    this.feature_Intelligence12 = feature_Intelligence12;
   }
 
 

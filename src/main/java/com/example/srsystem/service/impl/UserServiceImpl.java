@@ -6,6 +6,8 @@ import com.example.srsystem.domain.model.Detail;
 import com.example.srsystem.domain.model.Numeraidata;
 import com.example.srsystem.domain.model.Prediction;
 import com.example.srsystem.service.UserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -141,13 +143,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Numeraidata> selectData(){
-        return userMapper.selectData();
+    public PageInfo<Numeraidata> selectData(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(userMapper.selectData());
     }
 
     @Override
     public List<Prediction> selectPrediction(){
         return userMapper.selectPrediction();
+    }
+
+    @Override
+    public PageInfo<Numeraidata>selectStockByRange(@Param("min") double min, @Param("max") double max, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(userMapper.selectStockByRange(min, max));
+    }
+
+    @Override
+    public List<Numeraidata>selfRecoms(){
+        return userMapper.selfRecoms();
     }
 
     @Override
@@ -178,19 +192,11 @@ public class UserServiceImpl implements UserService {
         Detail detail = new Detail();
         detail.setId(id);
         detail.setEra(data.getEra());
-        detail.setData_Type(data.getData_Type());
         detail.setFeature_Intelligence1(data.getFeature_Intelligence1());
         detail.setFeature_Intelligence2(data.getFeature_Intelligence2());
         detail.setFeature_Intelligence3(data.getFeature_Intelligence3());
         detail.setFeature_Intelligence4(data.getFeature_Intelligence4());
         detail.setFeature_Intelligence5(data.getFeature_Intelligence5());
-        detail.setFeature_Intelligence6(data.getFeature_Intelligence6());
-        detail.setFeature_Intelligence7(data.getFeature_Intelligence7());
-        detail.setFeature_Intelligence8(data.getFeature_Intelligence8());
-        detail.setFeature_Intelligence9(data.getFeature_Intelligence9());
-        detail.setFeature_Intelligence10(data.getFeature_Intelligence10());
-        detail.setFeature_Intelligence11(data.getFeature_Intelligence11());
-        detail.setFeature_Intelligence12(data.getFeature_Intelligence12());
         detail.setTarget(data.getTarget());
         detail.setPrediction(prediction.getPrediction());
         return detail;
@@ -205,7 +211,7 @@ public class UserServiceImpl implements UserService {
             BigDecimal x = new BigDecimal("10000");
             BigDecimal r = target.subtract(prediction);
             double risk = r.multiply(r).multiply(x).doubleValue();
-            userMapper.addRisk(detail.getId(), risk);
+            userMapper.addRisk1(detail.getId(), risk);
         }
     }
 }

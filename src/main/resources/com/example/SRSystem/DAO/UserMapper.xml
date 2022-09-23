@@ -75,8 +75,7 @@
 
     <select id="selectData" resultType="com.example.srsystem.domain.model.Numeraidata" >
         select *
-        from data333 right join stockrisk
-        on data333.id=stockrisk.id;
+        from data333
     </select>
 
     <select id="viewData" resultType="com.example.srsystem.domain.model.Numeraidata" >
@@ -96,11 +95,31 @@
         where id = #{id}
     </select>
 
+    <select id="selectStockByRange" resultType="com.example.srsystem.domain.model.Numeraidata" >
+        select *
+        from data333
+        where risk >= #{min} and #{max} > risk
+        order by risk
+    </select>
+
+    <select id="selfRecoms" resultType="com.example.srsystem.domain.model.Numeraidata" >
+        select *
+        from data333
+        order by risk
+        limit 0,20
+    </select>
+
     <select id="selectRisk" resultType="com.example.srsystem.domain.model.Detail" >
         select data333.id, data333.target, pre333.prediction
         from data333 right join pre333
-        on data333.id=pre333.id;
+        on data333.id=pre333.id
     </select>
+
+    <update id="addRisk1" parameterType="com.example.srsystem.domain.entity.Data333">
+        update data333
+        set risk = #{risk}
+        where id = #{id}
+    </update>
 
     <insert id="addRisk" parameterType="com.example.srsystem.domain.entity.Stockrisk">
         insert into stockrisk(`id`, `risk`)

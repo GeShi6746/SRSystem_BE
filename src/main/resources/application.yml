@@ -44,3 +44,8 @@ spring:
     header: token
   jackson:
     time-zone: GMT-5
+  pagehelper:
+    helper-dialect: mysql
+    reasonable: true
+    support-methods-arguments: true
+    params: count=countSql
